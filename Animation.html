@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>CSS Animation with localStorage</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background: #222;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px;
+  }
+
+  button {
+    padding: 15px 30px;
+    font-size: 18px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    background-color: #3498db;
+    color: white;
+    transition: background-color 0.3s ease;
+  }
+
+  button:hover {
+    background-color: #2980b9;
+  }
+
+  @keyframes pulse {
+    0% {
+      transform: scale(1);
+      background-color: #3498db;
+    }
+    50% {
+      transform: scale(1.2);
+      background-color: #2ecc71;
+    }
+    100% {
+      transform: scale(1);
+      background-color: #3498db;
+    }
+  }
+
+  .animate {
+    animation: pulse 1s ease forwards;
+  }
+
+  .message {
+    margin-top: 20px;
+    font-size: 1.1rem;
+  }
+</style>
+</head>
+<body>
+
+<button id="animButton">Click me!</button>
+<div id="message" class="message"></div>
+
+<script>
+  const button = document.getElementById('animButton');
+  const message = document.getElementById('message');
+
+  function loadPreference() {
+    const lastClicked = localStorage.getItem('lastClicked');
+    if (lastClicked) {
+      message.textContent = `Last clicked at: ${new Date(parseInt(lastClicked)).toLocaleTimeString()}`;
+    } else {
+      message.textContent = "Button not clicked yet.";
+    }
+  }
+
+  function handleClick() {
+    button.classList.remove('animate');
+    void button.offsetWidth;
+    button.classList.add('animate');
+
+    const now = Date.now();
+    localStorage.setItem('lastClicked', now);
+
+    message.textContent = `Last clicked at: ${new Date(now).toLocaleTimeString()}`;
+  }
+
+  loadPreference();
+
+  button.addEventListener('click', handleClick);
+</script>
+
+</body>
+</html>
